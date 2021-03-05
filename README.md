@@ -13,7 +13,8 @@
 
 因为我介绍的方法是一键替换群晖的默认证书，所以，为了防止意外，最好保证你的证书列表里只有一条记录，即默认证书那一条。实际上因为支持了泛域名证书，基本上这一条记录就足够用了（当然，如果你要管理多个域名，可能本文的方法并不适用）。开始工作前你的证书列表大概应该是这个样子：
 
-[![img](F:\markdown图片\cert-list.png)](http://s3.up4dev.com:38080/blog/nas-cert-up/cert-list.png)
+![cert-list](https://user-images.githubusercontent.com/16465666/110086663-9b2b3580-7dcd-11eb-81f4-4ce1d46faa02.png)
+
 
 ## 2. 下载一键更新脚本
 
@@ -25,13 +26,15 @@
 
 解压后大概是这个样子：
 
-[![解压](F:\markdown图片\unzip.png)](http://s3.up4dev.com:38080/blog/nas-cert-up/unzip.png)
+![unzip](https://user-images.githubusercontent.com/16465666/110086711-ada56f00-7dcd-11eb-83ee-6c8a3422df7e.png)
+
 
 ## 3. 配置脚本参数
 
 编辑脚本的配置文件`config`:
 
-[![配置](F:\markdown图片\config.png)](http://s3.up4dev.com:38080/blog/nas-cert-up/config.png)
+![config](https://user-images.githubusercontent.com/16465666/110086746-b6964080-7dcd-11eb-9df6-bb239492790a.png)
+
 
 如图所示，需要编辑的几个字段我用蓝框标记出来了。
 
@@ -43,7 +46,8 @@
 
 需要指出的是，我给出的配置文件模板并没有给出所有acme.sh支持的域名服务商，大家可以参照 https://github.com/acmesh-official/acme.sh/tree/master/dnsapi来添加自己的配置。一般情况下，这个页面每个文件对应一个域名服务商，比如`dns_ali.sh`就是对应阿里云，文件名去掉`.sh`扩展名就是DNS类型，比如阿里云的DNS类型就是`dns_ali`。打开对应文件， 一般都可以在文件的头部找到需要设置的授权信息对应的密钥，比如阿里云的授权密钥所在的位置如下图所示：
 
-[![APIKEY](F:\markdown图片\apikey.png)](http://s3.up4dev.com:38080/blog/nas-cert-up/apikey.png)
+![apikey](https://user-images.githubusercontent.com/16465666/110086768-c01fa880-7dcd-11eb-8c67-4210bb6f684f.png)
+
 
 `config`模板中没有的服务商，请大家自行完善。
 
@@ -55,9 +59,9 @@
 
 在 File Station 中定位到下载的一键脚本的目录，查看该脚本的绝对路径：
 
-[![img](F:\markdown图片\file-info.png)](http://s3.up4dev.com:38080/blog/nas-cert-up/file-info.png)
+![file-info](https://user-images.githubusercontent.com/16465666/110086810-ce6dc480-7dcd-11eb-9f39-0fe08dbf7386.png)
+![file-path](https://user-images.githubusercontent.com/16465666/110086823-d3cb0f00-7dcd-11eb-8653-4b472a9e7d11.png)
 
-[![img](F:\markdown图片\file-path.png)](http://s3.up4dev.com:38080/blog/nas-cert-up/file-path.png)
 
 复制完整的绝对路径到剪贴板。
 
@@ -65,19 +69,23 @@
 
 打开 `控制面板 / 任务计划 / 新增 / 计划的任务 / 用户自定义的脚本`：
 
-[![img](F:\markdown图片\task.png)](http://s3.up4dev.com:38080/blog/nas-cert-up/task.png)
+![task](https://user-images.githubusercontent.com/16465666/110086856-dd547700-7dcd-11eb-8c97-92f30021d578.png)
+
 
 设置任务名称和操作用户，需要注意的是这里一定要选择`root`：
 
-[![img](F:\markdown图片\task-name.png)](http://s3.up4dev.com:38080/blog/nas-cert-up/task-name.png)
+![task-name](https://user-images.githubusercontent.com/16465666/110086886-e7767580-7dcd-11eb-8633-8784be95ee24.png)
+
 
 设置计划的时间和周期，这里只支持按月或者年重复，我们只能取按月重复才能满足 Let’s Encrypt 至少3个月更新一次的要求：
 
-[![img](F:\markdown图片\task-inv.png)](http://s3.up4dev.com:38080/blog/nas-cert-up/task-inv.png)
+![task-inv](https://user-images.githubusercontent.com/16465666/110086915-efceb080-7dcd-11eb-9410-9e0cb0e76cd3.png)
+
 
 设置执行脚本，这里我们将脚本的输出重定向到了一个`log.txt`的文件中，以方便后期查看脚本的执行情况：
 
-[![img](F:\markdown图片\task-cmd.png)](http://s3.up4dev.com:38080/blog/nas-cert-up/task-cmd.png)
+![task-cmd](https://user-images.githubusercontent.com/16465666/110086933-f5c49180-7dcd-11eb-9ee6-5cef0556d06f.png)
+
 
 上图红框中的脚本命令为(注意没有换行)：
 
@@ -91,7 +99,8 @@
 
 可以在新建的任务上点击右键立即执行任务：
 
-[![img](F:\markdown图片\task-run.png)](http://s3.up4dev.com:38080/blog/nas-cert-up/task-run.png)
+![task-run](https://user-images.githubusercontent.com/16465666/110086948-fc530900-7dcd-11eb-98e3-5bb9112cec64.png)
+
 
 这样脚本就会运行，自动更新证书，并重启web服务器加载新的脚本。以后，NAS会每隔一个月执行一次该脚本，自动更新证书。
 
